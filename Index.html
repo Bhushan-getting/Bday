@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wishes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f9c5d1 0%, #c2e9fb 100%);
+            color: #333;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
+            min-height: 85vh;
+            margin-top: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20" preserveAspectRatio="none"><path fill="%23ffffff" opacity="0.1" d="M0,0 L100,0 L100,10 C75,20 25,20 0,10 Z"/></svg>');
+            background-size: 100% 100%;
+        }
+        
+        .content-area {
+            padding: 25px 20px;
+            min-height: 55vh;
+            position: relative;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .wish-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border-left: 5px solid #ff7eb3;
+        }
+        
+        .wish-title {
+            color: #ff758c;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .wish-title i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .wish-text {
+            line-height: 1.6;
+            color: #555;
+            font-size: 1rem;
+        }
+        
+        .quote {
+            font-style: italic;
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            border-left: 3px solid #ff7eb3;
+            border-right: 3px solid #ff7eb3;
+        }
+        
+        .author {
+            text-align: right;
+            font-weight: 600;
+            color: #ff758c;
+            margin-top: 5px;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .nav-btn {
+            background: linear-gradient(to right, #ff7eb3, #ff758c);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(255, 118, 140, 0.3);
+            min-width: 140px;
+        }
+        
+        .nav-btn i {
+            margin-right: 8px;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 118, 140, 0.4);
+        }
+        
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        .page-indicator {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 8px;
+        }
+        
+        .indicator-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator-dot.active {
+            background-color: #ff758c;
+            transform: scale(1.2);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .birthday-icon {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #ff7eb3;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        .icon-1 { top: 10%; left: 5%; }
+        .icon-2 { top: 15%; right: 7%; }
+        .icon-3 { bottom: 20%; left: 8%; }
+        .icon-4 { bottom: 30%; right: 10%; }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin-top: 10px;
+                min-height: 82vh;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .buttons-container {
+                padding: 15px;
+            }
+            
+            .nav-btn {
+                min-width: 120px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Decorative icons -->
+        <div class="birthday-icon icon-1"><i class="fas fa-birthday-cake"></i></div>
+        <div class="birthday-icon icon-2"><i class="fas fa-gift"></i></div>
+        <div class="birthday-icon icon-3"><i class="fas fa-heart"></i></div>
+        <div class="birthday-icon icon-4"><i class="fas fa-star"></i></div>
+        
+        <div class="header">
+            <h1><i class="fas fa-birthday-cake"></i> Birthday Wishes</h1>
+            <p>Tap on buttons below to explore heartfelt wishes</p>
+        </div>
+        
+        <div class="content-area">
+            <!-- Page 1: Happy Birthday -->
+            <div class="page active" id="page1">
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-glass-cheers"></i> Happy Birthday!</h2>
+                    <p class="wish-text">
+                        On your special day, I wish you endless joy, laughter, and beautiful moments. 
+                        May this year bring you closer to your dreams and fill your life with happiness. 
+                        You deserve the very best today and always!
+                    </p>
+                </div>
+                
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-star"></i> Wishing You the Best</h2>
+                    <p class="wish-text">
+                        May your birthday be as wonderful as you are! I hope your day is filled with love, 
+                        joy, and all the things that make you smile. Here's to another year of amazing adventures 
+                        and beautiful memories.
+                    </p>
+                </div>
+                
+                <div class="quote">
+                    "Count your age by friends, not years. Count your life by smiles, not tears." — John Lennon
+                </div>
+            </div>
+            
+            <!-- Page 2: Heartfelt Wishes -->
+            <div class="page" id="page2">
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-heart"></i> Heartfelt Wishes</h2>
+                    <p class="wish-text">
+                        On this special day, I want you to know how much you mean to me. 
+                        Your kindness, generosity, and beautiful spirit inspire everyone around you. 
+                        May your birthday be filled with the same warmth you bring to others.
+                    </p>
+                </div>
+                
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-sun"></i> Brightest Day</h2>
+                    <p class="wish-text">
+                        Sending you the brightest birthday wishes! May your day shine as brightly as your smile 
+                        and be filled with the warmth of love from family and friends. You light up every room you enter.
+                    </p>
+                </div>
+                
+                <div class="quote">
+                    "The more you praise and celebrate your life, the more there is in life to celebrate." — Oprah Winfrey
+                </div>
+            </div>
+            
+            <!-- Page 3: Funny Wishes -->
+            <div class="page" id="page3">
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-laugh-beam"></i> Funny Wishes</h2>
+                    <p class="wish-text">
+                        Happy Birthday! Remember, you're not getting older, you're just becoming a classic. 
+                        Like fine wine, you keep getting better with age. Just don't let them check your expiration date!
+                    </p>
+                </div>
+                
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-birthday-cake"></i> Cake Time!</h2>
+                    <p class="wish-text">
+                        You know you're getting old when the candles cost more than the cake. 
+                        But hey, at least you can blame any forgetfulness on "too many birthdays" now! 
+                        Enjoy your cake and eat it too!
+                    </p>
+                </div>
+                
+                <div class="quote">
+                    "You are only young once, but you can be immature for a lifetime." — John G. Morris
+                </div>
+            </div>
+            
+            <!-- Page 4: Inspirational Wishes -->
+            <div class="page" id="page4">
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-rocket"></i> New Beginnings</h2>
+                    <p class="wish-text">
+                        Your birthday marks a new beginning, a fresh start to pursue your dreams with renewed energy. 
+                        May this new chapter of your life be filled with success, growth, and fulfillment beyond measure.
+                    </p>
+                </div>
+                
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-compass"></i> Journey Ahead</h2>
+                    <p class="wish-text">
+                        As you celebrate another year of life, remember that the journey ahead holds limitless possibilities. 
+                        May you have the courage to chase your dreams and the wisdom to appreciate every moment along the way.
+                    </p>
+                </div>
+                
+                <div class="quote">
+                    "The secret of staying young is to live honestly, eat slowly, and lie about your age." — Lucille Ball
+                </div>
+            </div>
+            
+            <!-- Page 5: For Special Person -->
+            <div class="page" id="page5">
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-crown"></i> For a Special Person</h2>
+                    <p class="wish-text">
+                        To someone who makes the world a better place just by being in it - Happy Birthday! 
+                        Your presence is a gift to everyone who knows you. May your special day be as incredible as you are.
+                    </p>
+                </div>
+                
+                <div class="wish-card">
+                    <h2 class="wish-title"><i class="fas fa-gem"></i> You're a Treasure</h2>
+                    <p class="wish-text">
+                        On your birthday, I want to remind you how truly special you are. 
+                        You bring joy, laughter, and light wherever you go. May your day be filled with all the love 
+                        and happiness you've given to others throughout the years.
+                    </p>
+                </div>
+                
+                <div class="quote">
+                    "The best birthdays are those that haven't arrived yet, because you always have something to look forward to." — Unknown
+                </div>
+            </div>
+            
+            <!-- Page indicator dots -->
+            <div class="page-indicator">
+                <div class="indicator-dot active" data-page="1"></div>
+                <div class="indicator-dot" data-page="2"></div>
+                <div class="indicator-dot" data-page="3"></div>
+                <div class="indicator-dot" data-page="4"></div>
+                <div class="indicator-dot" data-page="5"></div>
+            </div>
+        </div>
+        
+        <div class="buttons-container">
+            <button class="nav-btn" id="btn1"><i class="fas fa-birthday-cake"></i> Happy Birthday</button>
+            <button class="nav-btn" id="btn2"><i class="fas fa-heart"></i> Heartfelt</button>
+            <button class="nav-btn" id="btn3"><i class="fas fa-laugh-beam"></i> Funny</button>
+            <button class="nav-btn" id="btn4"><i class="fas fa-rocket"></i> Inspirational</button>
+            <button class="nav-btn" id="btn5"><i class="fas fa-crown"></i> Special Person</button>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Made with <i class="fas fa-heart" style="color:#ff758c;"></i> for your special day</p>
+    </div>
+
+    <script>
+        // Get all buttons and pages
+        const buttons = document.querySelectorAll('.nav-btn');
+        const pages = document.querySelectorAll('.page');
+        const dots = document.querySelectorAll('.indicator-dot');
+        
+        // Function to show a specific page
+        function showPage(pageNumber) {
+            // Hide all pages
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the selected page
+            document.getElementById(`page${pageNumber}`).classList.add('active');
+            
+            // Update active dot
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+                if(dot.getAttribute('data-page') == pageNumber) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            // Add a subtle animation to the page content
+            const activePage = document.getElementById(`page${pageNumber}`);
+            activePage.style.animation = 'none';
+            setTimeout(() => {
+                activePage.style.animation = 'fadeIn 0.5s ease forwards';
+            }, 10);
+        }
+        
+        // Add click event listeners to buttons
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const pageNumber = this.id.replace('btn', '');
+                showPage(pageNumber);
+                
+                // Add a small visual feedback for the button click
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+        
+        // Add click event listeners to dots
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const pageNumber = this.getAttribute('data-page');
+                showPage(pageNumber);
+            });
+        });
+        
+        // Auto-rotate pages every 15 seconds for a slideshow effect
+        let currentPage = 1;
+        setInterval(() => {
+            currentPage++;
+            if(currentPage > 5) currentPage = 1;
+            showPage(currentPage);
+        }, 15000);
+        
+        // Initialize with first page
+        showPage(1);
+    </script>
+</body>
+</html>
